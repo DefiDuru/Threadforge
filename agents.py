@@ -6,7 +6,29 @@ load_dotenv()
 # Fix for Groq not supporting cache_breakpoint from crewai/litellm
 os.environ["LITELLM_DROP_PARAMS"] = "true"
 import litellm
-litellm.drop_params = True
+
+# Remove unsupported params before they reach Groq
+_original_completion = litellm.completion
+
+UNSUPPORTED_KEYS = [
+    "cache_breakpoint",
+    "is_litellm",
+]
+
+def patched_completion(*args, **kwargs):
+    for key in UNSUPPORTED_KEYS:
+        kwargs.pop(key, None)
+
+    messages = kwargs.get("messages")
+    if isinstance(messages, list):
+        for msg in messages:
+            if isinstance(msg, dict):
+                msg.pop("cache_breakpoint", None)
+                msg.pop("is_litellm", None)
+
+    return _original_completion(*args, **kwargs)
+
+litellm.completion = patched_completion
 
 from crewai import Agent, LLM
 from crewai_tools import SerperDevTool
