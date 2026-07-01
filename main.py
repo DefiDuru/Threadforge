@@ -72,3 +72,11 @@ def versions():
         "fastapi": importlib.metadata.version("fastapi"),
         "groq": importlib.metadata.version("groq"),
     }
+    import inspect
+from crewai import LLM
+
+@app.get("/llm-info")
+def llm_info():
+    return {
+        "llm_signature": str(inspect.signature(LLM)),
+    }
