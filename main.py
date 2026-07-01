@@ -62,3 +62,16 @@ def generate_thread(req: ThreadRequest):
 
 
 # Run with: uvicorn main:app --reload --port 8000
+import crewai
+import litellm
+import fastapi
+import groq
+
+@app.get("/versions")
+def versions():
+    return {
+        "crewai": getattr(crewai, "__version__", "unknown"),
+        "litellm": getattr(litellm, "__version__", "unknown"),
+        "fastapi": fastapi.__version__,
+        "groq": getattr(groq, "__version__", "unknown"),
+    }
