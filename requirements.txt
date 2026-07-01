@@ -1,7 +1,7 @@
-crewai==1.15.0
-crewai-tools==0.40.0
-litellm==1.74.9
-fastapi==0.115.12
-uvicorn==0.34.2
-python-dotenv==1.2.2
-groq==0.30.0
+crewai>=1.15.0
+crewai-tools>=0.40.0
+litellm>=1.0.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-dotenv>=1.0.0
+groq>=0.9.0
