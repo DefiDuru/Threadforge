@@ -1,0 +1,79 @@
+You are a senior full-stack product engineer. Build a working, demo-ready web
+app for the HACD Labs Incubator Season 2 sprint. Optimize for a single,
+one-minute-legible formation moment over feature breadth.
+
+# Product
+ThreadForge — a multi-agent AI tool that turns a raw project idea into a
+launch-ready X thread, built for builders who need to build in public but
+don't have the time or copywriting background to do it well.
+Category: AI agent.
+
+# Why HACD (do not break this framing)
+This product issues a HACD Stack Asset: it is FORMED, not merely deployed —
+HACD is the PoW container, HAC pays the stack cost, and Stack is the formation
+action that writes durable on-chain state. ThreadForge's core thesis is that
+real agentic work (live research, structured drafting, review) beats one-shot
+prompting, and HACD's PoW formation is the same idea applied to assets: real
+work beats free minting. Treat each formed HACD as a "formation record" whose
+formation time cannot be backdated. Never imply stack cost guarantees a price,
+and never call HACD "just an NFT".
+
+# Scope for the sprint
+In scope:
+- Input a project idea (text box) and optional extra requirements (hashtags, mentions)
+- Watch the three agents run in sequence with visible status (Research -> Write -> Format), showing a short live-updating log line per agent
+- View the final generated thread as individually numbered tweet cards, copyable
+- The formation moment, stated as a feature: after a thread is generated, the user can "Forge" it on-chain, which forms a HacdStackRecord tied to that generation
+
+Out of scope (explicitly skip): real wallet/payment signing, auth beyond a mock
+sign-in, mobile-native apps, real Groq/SerperDev API calls (simulate agent
+output with realistic mock streaming text for demo purposes). If a live HACD
+connection is unavailable, mock the Stack / formation step faithfully and
+label it "formation: mocked for demo" in the UI.
+
+# Pages / screens
+- Generate: input form (project idea, extra requirements) plus the live 3-agent run view
+- Thread Result: the final numbered thread as tweet-style cards with a copy button and a "Forge this thread" button
+- Formation / proof view: shows the HacdStackRecord receipt once a thread is forged, including the HACD name, formed-at timestamp, and stack cost, this is what a reviewer opens to verify the formation actually happened
+
+# Data model
+- ThreadGeneration { id, projectIdea, extraRequirements, tweets: string[], createdAt }
+- HacdStackRecord { hacdName (16-letter alphabet), formedAt, stackCostHac,
+  status ("formed" | "mocked"), threadGenerationId }
+
+# HACD integration points
+- On "Forge this thread," form a HacdStackRecord and show the formation receipt with its formed-at time
+- The formation proof view is shareable, so a second viewer (a reviewer) can open it and see the same receipt
+- The HACD name shown on the receipt is derived deterministically from the thread's content hash, so identical threads always reference the same formation slot
+
+# The formation moment (build this first and polish it most)
+A user pastes a project idea, watches the three agents (Research, Write,
+Format) run in sequence with short status lines and a subtle progress
+indicator, then sees the finished thread appear as numbered tweet cards. They
+click "Forge this thread," a brief on-chain-style confirmation animation
+plays, and a formation receipt appears showing the HACD name, formation
+timestamp, and 50 HAC stack cost, clearly labeled "formation: mocked for
+demo." This whole flow should be watchable start to finish in under a minute.
+
+# Visual system
+Dark, editorial, "terminal-confident" aesthetic:
+- Background #14151A; cards #1C1D24 (hover #212229); borders #2A2B33.
+- Text: primary #EDEAE3, secondary #9A9CA6, muted #65676F.
+- Category accent: AI #9B8FE8. Use this for links, active states, agent status
+  indicators, and the formation highlight.
+- Fonts: 'Space Grotesk' for headings, 'Inter' for body, 'JetBrains Mono' for
+  labels, tickers, the HACD name, stack cost, and the formation timestamp.
+- Rounded 14px cards, subtle 3px translate-up on hover, monospace metadata rows.
+- Respect prefers-reduced-motion.
+
+# Acceptance criteria (the build is done when)
+- [ ] A user can complete the formation moment end to end: idea in, thread out, thread forged.
+- [ ] A HacdStackRecord is created and its formation time is shown.
+- [ ] Formation proof is visible to a second viewer (the reviewer's POV) via a shareable result view.
+- [ ] The why-HACD value is obvious from the UI without explanation.
+- [ ] Mocked vs. live formation status is labeled honestly.
+- [ ] No price-floor, yield, guaranteed-return, or "just an NFT" language.
+- [ ] The app runs with no console errors and matches the visual system.
+
+Use mock/local data so the app runs immediately. Keep the code clean and the
+README short.
